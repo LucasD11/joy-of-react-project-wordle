@@ -1,7 +1,8 @@
 import React from "react";
 
-function GuessInput() {
+function GuessInput({ guesses, setGuesses }) {
   const [guess, setGuess] = React.useState("");
+
   return (
     <>
       <form
@@ -10,6 +11,7 @@ function GuessInput() {
           event.preventDefault();
           // TODO: Handle the guess submission
           console.log(`Submitted guess: ${guess}`);
+          setGuesses([...guesses, guess]);
           setGuess("");
         }}
       >
