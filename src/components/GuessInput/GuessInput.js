@@ -1,7 +1,11 @@
 import React from "react";
+import { checkGuess } from "../../game-helpers";
 
-function GuessInput({ guesses, setGuesses }) {
+function GuessInput({ guesses, setGuesses, answer }) {
   const [guess, setGuess] = React.useState("");
+
+  const [win, setWin] = React.useState(false);
+  const lose = guesses.length >= 6;
 
   return (
     <>
@@ -12,6 +16,13 @@ function GuessInput({ guesses, setGuesses }) {
           // TODO: Handle the guess submission
           console.log(`Submitted guess: ${guess}`);
           setGuesses([...guesses, guess]);
+          if (
+            checkGuess(guess, answer).every(
+              (status) => status["status"] === "correct"
+            )
+          ) {
+            setWin(true);
+          }
           setGuess("");
         }}
       >
@@ -24,8 +35,24 @@ function GuessInput({ guesses, setGuesses }) {
           minLength={5}
           maxLength={5}
           pattern={"[a-zA-Z]{5}"}
+          disabled={win || lose}
         />
       </form>
+      {win && (
+        <div className="happy banner">
+          <p>
+            <strong>Congratulations!</strong> Got it in
+            <strong>3 guesses</strong>.
+          </p>
+        </div>
+      )}
+      {lose && (
+        <div className="sad banner">
+          <p>
+            Sorry, the correct answer is <strong>LEARN</strong>.
+          </p>
+        </div>
+      )}
     </>
   );
 }
